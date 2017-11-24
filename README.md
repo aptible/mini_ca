@@ -4,7 +4,7 @@
 [![Build Status](https://travis-ci.org/aptible/mini_ca.png?branch=master)](https://travis-ci.org/aptible/mini_ca)
 [![Dependency Status](https://gemnasium.com/aptible/mini_ca.png)](https://gemnasium.com/aptible/mini_ca)
 
-TODO: Add description.
+A Gem to generate custom X509 certificates in specs.
 
 ## Installation
 
@@ -16,7 +16,27 @@ And then run `bundle install`.
 
 ## Usage
 
-TODO: Add usage notes.
+```
+# Instantiate a CA
+ca = MiniCa::Certificate.new('My Test CA', ca: true)
+
+# Create an intermediate
+intermediate = ca.issue('My Intermediate', ca: true)
+
+# Create a certificate
+certificate = intermediate.issue('My Certificate')
+
+# Get the certificate chain as PEM
+certificate.chain_pem
+
+# Get the certificate bundle (i.e. including the leaf certificate) as PEM
+certificate.bundle_pem
+
+# Verify a certificate
+ca.store.verify(certificate.x509, [intermediate.x509])
+```
+
+See the specs for more examples.
 
 ## Contributing
 

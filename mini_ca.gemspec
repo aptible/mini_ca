@@ -10,8 +10,8 @@ Gem::Specification.new do |spec|
   spec.version       = MiniCa::VERSION
   spec.authors       = ['Thomas Orozco']
   spec.email         = ['thomas@orozco.fr']
-  spec.description   = 'TODO: Write a gem description'
-  spec.summary       = 'TODO: Write a gem summary'
+  spec.description   = 'A minimal Certification Authority, for use in specs'
+  spec.summary       = spec.description
   spec.homepage      = 'https://github.com/aptible/mini_ca'
   spec.license       = 'MIT'
 
