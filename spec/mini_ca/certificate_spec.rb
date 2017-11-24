@@ -130,4 +130,11 @@ describe MiniCa::Certificate do
       expect(c.bundle_pem).to end_with(i1.x509_pem)
     end
   end
+
+  describe '#private_key_pem' do
+    it 'returns a private key' do
+      c = described_class.new('foo')
+      expect(c.private_key_pem).to include('BEGIN RSA PRIVATE KEY')
+    end
+  end
 end

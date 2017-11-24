@@ -2,7 +2,7 @@ module MiniCa
   class Certificate
     DIGEST = OpenSSL::Digest::SHA256
 
-    attr_reader :key, :x509, :issuer, :ca
+    attr_reader :private_key, :x509, :issuer, :ca
 
     # rubocop:disable ParameterLists
     def initialize(
@@ -18,7 +18,7 @@ module MiniCa
       location: nil,
       organization: nil
     )
-      @key = OpenSSL::PKey::RSA.new(2048)
+      @private_key = OpenSSL::PKey::RSA.new(2048)
       @x509 = OpenSSL::X509::Certificate.new
       @issuer = issuer
       @ca = ca
@@ -27,7 +27,7 @@ module MiniCa
       x509.version = 0x2
       x509.serial = serial || 0
 
-      x509.public_key = key.public_key
+      x509.public_key = private_key.public_key
 
       x509.subject = OpenSSL::X509::Name.new
 
@@ -81,7 +81,7 @@ module MiniCa
 
       exts.each { |e| x509.add_extension(e) }
 
-      signing_key = issuer ? issuer.key : key
+      signing_key = issuer ? issuer.private_key : private_key
       x509.sign signing_key, DIGEST.new
     end
     # rubocop:enable ParameterLists
@@ -122,8 +122,8 @@ module MiniCa
       bundle.map(&:x509).map(&:to_s).join('')
     end
 
-    def key_pem
-      key.to_s
+    def private_key_pem
+      private_key.to_s
     end
   end
 end
