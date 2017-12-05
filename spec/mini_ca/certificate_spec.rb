@@ -53,10 +53,28 @@ describe MiniCa::Certificate do
       end
     end
 
-    it 'initializes with a custom private_key' do
+    it 'initializes with a custom private_key (RSA)' do
       k = OpenSSL::PKey::RSA.new(512)
-      expect(described_class.new('x', private_key: k).private_key_pem)
-        .to eq(k.to_pem)
+
+      crt = described_class.new('x', private_key: k)
+      expect(crt.private_key_pem).to eq(k.to_pem)
+      expect(crt.x509.check_private_key(k)).to be_truthy
+    end
+
+    it 'initializes with a custom private_key (ECDSA)' do
+      k = OpenSSL::PKey::EC.new('prime256v1').tap(&:generate_key)
+
+      # Ruby < 2.4 lacks a #private? method on EC keys, which is used when
+      # signing. We're not going to monkey-patch this for users, but we want to
+      # monkey patch it for our own specs.
+      maj, min, = RUBY_VERSION.split('.').map { |e| Integer(e) }
+      unless maj >= 2 && min >= 4 || maj > 2
+        allow(k).to receive(:private?) { k.private_key? }
+      end
+
+      crt = described_class.new('x', private_key: k)
+      expect(crt.private_key_pem).to eq(k.to_pem)
+      expect(crt.x509.check_private_key(k)).to be_truthy
     end
   end
 
