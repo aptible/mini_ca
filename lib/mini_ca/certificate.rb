@@ -28,7 +28,7 @@ module MiniCa
       x509.version = 0x2
       x509.serial = serial || 0
 
-      x509.public_key = send(:private_key).public_key
+      x509.public_key = public_key
 
       x509.subject = OpenSSL::X509::Name.new
 
@@ -125,6 +125,21 @@ module MiniCa
 
     def private_key_pem
       private_key.to_pem
+    end
+
+    def public_key
+      case private_key
+      when OpenSSL::PKey::RSA
+        private_key.public_key
+      when OpenSSL::PKey::EC
+        # See: https://github.com/ruby/openssl/issues/29#issuecomment-230664793
+        # See: https://alexpeattie.com/blog/signing-a-csr-with-ecdsa-in-ruby
+        pub = OpenSSL::PKey::EC.new(private_key.group)
+        pub.public_key = private_key.public_key
+        pub
+      else
+        raise Error, "Unsupported private_key: #{private_key.class}"
+      end
     end
   end
 end
