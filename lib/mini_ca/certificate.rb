@@ -16,9 +16,10 @@ module MiniCa
       country: nil,
       state: nil,
       location: nil,
-      organization: nil
+      organization: nil,
+      private_key: nil
     )
-      @private_key = OpenSSL::PKey::RSA.new(2048)
+      @private_key = private_key || OpenSSL::PKey::RSA.new(2048)
       @x509 = OpenSSL::X509::Certificate.new
       @issuer = issuer
       @ca = ca
@@ -27,7 +28,7 @@ module MiniCa
       x509.version = 0x2
       x509.serial = serial || 0
 
-      x509.public_key = private_key.public_key
+      x509.public_key = send(:private_key).public_key
 
       x509.subject = OpenSSL::X509::Name.new
 
@@ -81,7 +82,7 @@ module MiniCa
 
       exts.each { |e| x509.add_extension(e) }
 
-      signing_key = issuer ? issuer.private_key : private_key
+      signing_key = issuer ? issuer.private_key : send(:private_key)
       x509.sign signing_key, DIGEST.new
     end
     # rubocop:enable ParameterLists

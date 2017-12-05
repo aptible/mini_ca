@@ -52,6 +52,12 @@ describe MiniCa::Certificate do
           .to eq('/CN=x/O=bar')
       end
     end
+
+    it 'initializes with a custom private_key' do
+      k = OpenSSL::PKey::RSA.new(512)
+      expect(described_class.new('x', private_key: k).private_key_pem)
+        .to eq(k.to_pem)
+    end
   end
 
   context 'CA' do
