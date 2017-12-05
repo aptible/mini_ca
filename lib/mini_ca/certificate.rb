@@ -111,19 +111,19 @@ module MiniCa
     end
 
     def x509_pem
-      x509.to_s
+      x509.to_pem
     end
 
     def chain_pem
-      chain.map(&:x509).map(&:to_s).join('')
+      chain.map(&:x509).map(&:to_pem).join('')
     end
 
     def bundle_pem
-      bundle.map(&:x509).map(&:to_s).join('')
+      bundle.map(&:x509).map(&:to_pem).join('')
     end
 
     def private_key_pem
-      private_key.to_s
+      private_key.to_pem
     end
   end
 end
