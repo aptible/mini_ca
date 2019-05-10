@@ -49,4 +49,4 @@ See the specs for more examples.
 
 MIT License, see [LICENSE](LICENSE.md) for details.
 
-Copyright (c) 2017 [Aptible](https://www.aptible.com), Thomas Orozco, and contributors.
+Copyright (c) 2019 [Aptible](https://www.aptible.com), Thomas Orozco, and contributors.
