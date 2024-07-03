@@ -1,7 +1,6 @@
 # ![](https://raw.github.com/aptible/straptible/master/lib/straptible/rails/templates/public.api/icon-60px.png) MiniCa
 
 [![Gem Version](https://badge.fury.io/rb/mini_ca.png)](https://rubygems.org/gems/mini_ca)
-[![Build Status](https://travis-ci.org/aptible/mini_ca.png?branch=master)](https://travis-ci.org/aptible/mini_ca)
 [![Dependency Status](https://gemnasium.com/aptible/mini_ca.png)](https://gemnasium.com/aptible/mini_ca)
 
 A Gem to generate custom X509 certificates in specs.

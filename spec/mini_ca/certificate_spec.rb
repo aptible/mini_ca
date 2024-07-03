@@ -68,9 +68,8 @@ describe MiniCa::Certificate do
       # signing. We're not going to monkey-patch this for users, but we want to
       # monkey patch it for our own specs.
       maj, min, = RUBY_VERSION.split('.').map { |e| Integer(e) }
-      unless maj >= 2 && min >= 4 || maj > 2
-        allow(k).to receive(:private?) { k.private_key? }
-      end
+
+      allow(k).to receive(:private?) { k.private_key? } unless maj >= 2 && min >= 4 || maj > 2
 
       crt = described_class.new('x', private_key: k)
       expect(crt.private_key_pem).to eq(k.to_pem)

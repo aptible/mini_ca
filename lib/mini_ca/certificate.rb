@@ -40,6 +40,7 @@ module MiniCa
         ['O', organization]
       ].each do |prop, value|
         next if value.nil?
+
         x509.subject = x509.subject.add_entry(prop, value)
       end
 
@@ -53,9 +54,7 @@ module MiniCa
           raise Error, 'Certificate cannot become valid before issuer'
         end
 
-        if issuer.x509.not_after < not_after
-          raise Error, 'Certificate cannot expire after issuer'
-        end
+        raise Error, 'Certificate cannot expire after issuer' if issuer.x509.not_after < not_after
       else
         not_before ||= Time.now - 3600 * 24
         not_after ||= Time.now + 3600 + 24
@@ -89,12 +88,14 @@ module MiniCa
 
     def issue(cn, **opts)
       raise 'CA must be set to use #issue' unless ca
+
       @counter += 1
       Certificate.new(cn, issuer: self, serial: @counter, **opts)
     end
 
     def store
       raise 'CA must be set to use #store' unless ca
+
       OpenSSL::X509::Store.new.tap { |store| store.add_cert(x509) }
     end
 
