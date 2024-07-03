@@ -18,7 +18,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        RUBY_VERSION: ["2.1", "2.2", "2.3", "2.6", "3"]
+        RUBY_VERSION: ["2.2", "2.3", "2.6", "3"]
 
     steps:
       - name: Check out code
@@ -30,15 +30,8 @@ jobs:
           ruby-version: ${{ matrix.RUBY_VERSION }}
           bundler-cache: true
 
-      # We haven't updated this repo for compatibility with Ruby 3.x, yet are
-      # actually using it in deploy-api with 3.x. We'll run the tests, but
-      # defer fixing the rubocop issues that arise
-      - name: Lint
-        if: ${{ matrix.RUBY_VERSION != '3' }}
-        run: bundle exec rake rubocop
-
       - name: Run Tests
-        run: bundle exec rspec
+        run: bundle exec rake
 
   results:
     if: ${{ always() }}
