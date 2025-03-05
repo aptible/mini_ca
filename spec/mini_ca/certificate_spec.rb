@@ -62,7 +62,7 @@ describe MiniCa::Certificate do
     end
 
     it 'initializes with a custom private_key (ECDSA)' do
-      k = OpenSSL::PKey::EC.new('prime256v1').tap(&:generate_key)
+      k = OpenSSL::PKey::EC.generate('prime256v1')
 
       # Ruby < 2.4 lacks a #private? method on EC keys, which is used when
       # signing. We're not going to monkey-patch this for users, but we want to
