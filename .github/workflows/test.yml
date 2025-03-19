@@ -11,8 +11,29 @@ on:
       - master
 
 jobs:
-  test:
-    name: Test
+  test-20:
+    name: Test 20
+    runs-on: ubuntu-20.04
+    strategy:
+      fail-fast: false
+      matrix:
+        RUBY_VERSION: ["2.6", "3"]
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v4
+
+      - name: Install Ruby ${{ matrix.RUBY_VERSION }}
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: ${{ matrix.RUBY_VERSION }}
+          bundler-cache: true
+
+      - name: Run Tests
+        run: bundle exec rake
+
+  test-24:
+    name: Test 24
     runs-on: ubuntu-24.04
     strategy:
       fail-fast: false
@@ -36,7 +57,7 @@ jobs:
     if: ${{ always() }}
     runs-on: ubuntu-latest
     name: Final Results
-    needs: [test]
+    needs: [test-20, test-24]
     steps:
       - run: exit 1
         # see https://stackoverflow.com/a/67532120/4907315
