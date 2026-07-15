@@ -26,7 +26,8 @@ module MiniCa
       @counter = 0
 
       x509.version = 0x2
-      x509.serial = serial || 0
+      # https://datatracker.ietf.org/doc/html/rfc5280#section-4.1.2.2 — must be unique positive integer
+      x509.serial = serial || OpenSSL::BN.rand(128, 0)
 
       x509.public_key = public_key
 
